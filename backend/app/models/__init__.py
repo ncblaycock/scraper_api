@@ -1,4 +1,4 @@
 from .user import User
 from app.database import Base
-
-__all__ = ["User", "Base"]
+from .planning_permission import Record, PlanningPermissions
+__all__ = ["User", "Base", "Record", "PlanningPermissions"]

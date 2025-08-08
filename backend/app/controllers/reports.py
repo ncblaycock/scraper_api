@@ -3,9 +3,11 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.database import get_db
+from app.services.planning_permissions_service import PlanningPermissionsService
 from app.schemas.report import ReportCreate, ReportUpdate, ReportResponse
 from app.auth import get_current_active_user
 from app.models.user import User
+from app.models.planning_permission import PlanningPermissions
 
 router = APIRouter()
 
@@ -28,23 +30,22 @@ def create_report(
         "updated_at": "2023-01-01T00:00:00"
     }
 
-@router.get("/", response_model=List[ReportResponse])
+@router.get("/", response_model=PlanningPermissions)
 def get_reports(
     skip: int = 0,
     limit: int = 100,
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(get_current_active_user)
 ):
     """Get all reports for the current user"""
     # TODO: Implement report retrieval logic
     # This is a placeholder implementation
-    return []
+    response = PlanningPermissionsService().get_planning_permissions(skip, limit)
+    return response
 
-@router.get("/{report_id}", response_model=ReportResponse)
+@router.get("/{report_id}", response_model=PlanningPermissions)
 def get_report(
     report_id: int,
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(get_current_active_user)
 ):
     """Get a specific report by ID"""
     # TODO: Implement report retrieval logic
@@ -54,12 +55,11 @@ def get_report(
         detail="Report not found"
     )
 
-@router.put("/{report_id}", response_model=ReportResponse)
+@router.put("/{report_id}", response_model=PlanningPermissions)
 def update_report(
     report_id: int,
     report_update: ReportUpdate,
-    current_user: User = Depends(get_current_active_user),
-    db: Session = Depends(get_db)
+    current_user: User = Depends(get_current_active_user)
 ):
     """Update a specific report"""
     # TODO: Implement report update logic
